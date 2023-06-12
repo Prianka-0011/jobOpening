@@ -45,13 +45,20 @@ const save =function(req,res){
     })
 }
 const getOne = function(req, res) {
-  Job.findById(req.params.jobId).exec().then((job)=> {
-    const location = job.location.jobId(req.params.locationId)
-    console.log(location);
-  }).catch((error) =>{
-    
-  })
-}
+  //console.log("jf" + req.params.locationId);
+  Job.findById(req.params.jobId)
+    .exec()
+    .then((job) => {
+   
+      console.log("fdhdsfkhfsfh" + job);
+      const location = job.location;
+      console.log("jf" +location)
+    })
+    .catch((error) => {
+      // Handle the error here
+    });
+};
+
 
 module.exports = {
     getAll,

@@ -4,7 +4,12 @@ const app = express();
 const router = require("./routers/router")
 require("dotenv").config();
 app.use(express.json())
-
+app.use("/api", function(req, res, next) {
+    res.header('Access-Control-Allow-Origin',
+    'http://localhost:4200');
+    res.header('Access-Control-Allow-Headers', 'Origin, XRequested-With, Content-Type, Accept');
+    next();
+    })
 
 app.use("/api",router);
 const server = app.listen(process.env.PORT, "localhost", ()=>{

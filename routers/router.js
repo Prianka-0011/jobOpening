@@ -4,9 +4,14 @@ const jobController = require("../controllers/job.controller")
 const locationController = require("../controllers/location.controller");
 const { get } = require("mongoose");
 
+router.route("/totalJobCount")
+      
+      .get(jobController.getTotalJob)
+      
 
 router.route("/jobs")
       .get(jobController.getAll)
+      
       .post(jobController.save)
 
 

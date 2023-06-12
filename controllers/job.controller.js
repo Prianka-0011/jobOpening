@@ -7,34 +7,69 @@ let response={
     data:null
 }
 const Job = mongoose.model(process.env.MODEL_NAME)
-const _setResponse = function(job) {
-status=200;
-response = job;
-}
+// const _setResponse = function(job) {
+//     if (jobs && jobs.length > 0) {
+//         response.status = 200;
+//         response.data = jobs;
+//         response.message = jobs.length + " job(s) found!";  
+//       } else {
+//         response.status = 404;
+//         response.data = null;
+//         response.message = "No jobs found!";  
+//       }
+// }
 
 const _setError = function(error) {
     status = error;
     response.message = "an error occure while featching data."
 } 
-const getAll = function(req,res) {
-const offset=parseInt(req.query.offset);
-const pageSize=parseInt(req.query.count);
+const  getAll = function(req,res) {
+    let query = {};
+    let offset = 0;
+    let perPage = 10;
+    if (req.query.search) {
+      query = { "skills": { $regex: new RegExp(req.query.search, "i") } };
+    }
+    if (req.query.offset) {
+      offset = req.query.offset;
+    }
+    if (req.query.perPage) {
+      perPage = req.query.perPage <= 10 ? req.query.perPage : 10;
+    }
 
-    
- Job.find().skip(offset).limit(pageSize).exec().then((jobs) => _setResponse(jobs, offset, pageSize))
- .catch((error)=> _setError(error))
- .finally(()=> {
- res.status(status).json(response);
+    Job.find(query)
+    .skip(offset)
+    .limit(perPage)
+    .exec()
+    .then((jobs) => {
+      if (jobs && jobs.length > 0) {
+        response.status = 200;
+        response.data = jobs;
+        response.message = jobs.length + " job(s) found!";  
+      } else {
+        response.status = 404;
+        response.data = null;
+        response.message = "No jobs found!";  
+      }
+    })
+    .catch((error) => {
+      response.status = 500;
+      response.message = error;
+      response.data = null;
+    })
+    .finally(() => {
+      res.status(response.status).json(response);
+    });
+}
 
- })
-} 
 
 const save = function(req ,res) {
     console.log("Job Save");
     const _setResponse = function(job){
         console.log("Job Save",job);
         status = 200;
-        response = job;
+        response.data = job;
+        response.message = "New job create successfully"
     }
     const _setError = function(error) {
         status = error;
@@ -55,7 +90,8 @@ const getOne= function(req, res) {
         if (job)
         { 
             status=200;
-            response = job;
+            response.data = job;
+            response.message="One record found";
 
         }else{
             status=404;
@@ -64,7 +100,7 @@ const getOne= function(req, res) {
         }
         const _setError = function(error) {
             status = error;
-            response.message = "an error occure while featching data."
+            response.message = "an error occure while featching data.";
         } 
     Job.findById(req.params.jobId).exec()
     .then((job) =>_setResponse(job))
@@ -78,7 +114,8 @@ const fullUpdate= function(req, res) {
         if (job)
         { 
             status=200;
-            response = job;
+            response.data = job;
+            response.message= "Data update successfully"
 
         }else{
             status=404;
@@ -102,7 +139,8 @@ const partialUpdate= function(req, res) {
         if (job)
         { 
             status=200;
-            response = job;
+            response.data = job;
+            response.message="partial update successfully"
 
         }else{
             status=404;
@@ -143,11 +181,33 @@ const deleteData= function(req, res) {
         res.status(status).json(response);
     })
 }
+const getTotalJob = function(req, res) {
+    let query = {};
+    if (req.query.search) {
+      query = { "skills": { $regex: new RegExp(req.query.search, "i") } };
+    }
+    Job.find(query)
+      .count()
+      .then((count) => {
+        response.status = 200;
+        response.data = count;
+        response.message = count;
+      })
+      .catch((error) => {
+        response.status = 500;
+        response.data = null;
+        response.message = error;
+      })
+      .finally(() => {
+        res.status(response.status).json(response);
+      });
+  }
 module.exports = {
     getAll,
     save,
     getOne,
     fullUpdate,
     partialUpdate,
-    deleteData
+    deleteData,
+    getTotalJob
 }
