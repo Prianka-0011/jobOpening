@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 require("../models/jobOpening.model")
+require("../models/user")
 require("dotenv").config();
 
 const _mongooshConnectionResponse = function(res) {

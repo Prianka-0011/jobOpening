@@ -27,20 +27,20 @@ const  getAll = function(req,res) {
     console.log("getAll called");
     let query = {};
     let offset = 0;
-    let perPage = 10;
+    let count = 10;
     if (req.query.search) {
       query = { "skills": { $regex: new RegExp(req.query.search, "i") } };
     }
     if (req.query.offset) {
       offset = req.query.offset;
     }
-    if (req.query.perPage) {
-      perPage = req.query.perPage <= 10 ? req.query.perPage : 10;
+    if (req.query.count) {
+        count = req.query.count;
     }
 
     Job.find(query)
     .skip(offset)
-    .limit(perPage)
+    .limit(count)
     .exec()
     .then((jobs) => {
       if (jobs && jobs.length > 0) {

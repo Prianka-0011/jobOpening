@@ -4,12 +4,18 @@ const skill = mongoose.Schema ({
     name : String
 })
 const location = mongoose.Schema({
- latitude:Number,
- logitude:Number
+ cordinators: {
+     type:[Number],
+     index:"2"    
+    }
+ 
 })
 
 const jobSchema = mongoose.Schema({
-    tittle:String,
+    tittle:{
+        type:String,
+        required: [true, "Job title is required!"]
+    },
     salary:Number,
     description:String,
     exprience:Number,

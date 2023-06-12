@@ -2,16 +2,15 @@ const express = require("express");
 const router = express.Router();
 const jobController = require("../controllers/job.controller")
 const locationController = require("../controllers/location.controller");
-const { get } = require("mongoose");
-
+const userController = require("../controllers/user.controller")
 router.route("/totalJobCount")
-      
+
       .get(jobController.getTotalJob)
-      
+
 
 router.route("/jobs")
       .get(jobController.getAll)
-      
+
       .post(jobController.save)
 
 
@@ -26,5 +25,8 @@ router.route("/jobs/:jobId/location").post(locationController.save);
 router.route("/jobs/:jobId/location/:locationId").get(locationController.getOne);
 
 
+//login
+router.route("/login")
+.post(userController.login)
 
 module.exports= router;
