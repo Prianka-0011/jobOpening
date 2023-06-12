@@ -24,6 +24,7 @@ const _setError = function(error) {
     response.message = "an error occure while featching data."
 } 
 const  getAll = function(req,res) {
+    console.log("getAll called");
     let query = {};
     let offset = 0;
     let perPage = 10;
@@ -163,7 +164,7 @@ const deleteData= function(req, res) {
         if (job)
         { 
             status=200;
-            response = job;
+            response.data = job;
 
         }else{
             status=404;

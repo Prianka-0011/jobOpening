@@ -11,11 +11,11 @@ const location = mongoose.Schema({
 const jobSchema = mongoose.Schema({
     tittle:String,
     salary:Number,
-    descriotion:String,
-    ecprience:Number,
+    description:String,
+    exprience:Number,
     skills:[String],
     postDate:Date,
     location:location
 })
 
-mongoose.model("JobOpening",jobSchema,"jobOpenings");
+mongoose.model("JobOpening", jobSchema,"jobOpenings");

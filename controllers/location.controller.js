@@ -13,21 +13,6 @@ Job.findById(req.params.jobId).exec().then((jobs) => {
 
 
 }
-// const save =function(req,res){
-//     console.log(req.body);
-//     const name = req.body.hh;
-//     Job.findById(req.params.jobId)
-//     .exec()
-//     .then(job => {
-//       if (job) {
-//         job.location.push("poiiio"); // Add the new skill to the skills array
-//         return job.save(); // Save the modified job document
-//       } else {
-//         throw new Error("Job not found");
-//       }
-//     })
-// }
-//const skillToUpdate = job.skills.id(skillId);
 
 const save =function(req,res){
     console.log(req.body);
